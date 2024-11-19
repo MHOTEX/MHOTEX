@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login com Google</title>
-    <link rel="stylesheet" href="styles.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
-    <script src="script.js" defer></script>
 </head>
 <body>
     <h2>Login com Google</h2>
@@ -20,5 +18,30 @@
         <img id="user-image" alt="Imagem do usuário" />
         <p id="user-email"></p>
     </div>
+
+    <script>
+        document.getElementById("google-login-button").addEventListener("click", () => {
+            google.accounts.id.initialize({
+                client_id: "290122559278-ivkm1aboq7bs2c2vkj0kosnu52p9o69r.apps.googleusercontent.com",
+                callback: handleCredentialResponse,
+            });
+
+            google.accounts.id.prompt(); // Exibe a tela de login do Google
+        });
+
+        function handleCredentialResponse(response) {
+            const data = jwt_decode(response.credential);
+
+            // Exibe imagem e email do usuário
+            const userInfoDiv = document.getElementById("user-info");
+            const userImage = document.getElementById("user-image");
+            const userEmail = document.getElementById("user-email");
+
+            userImage.src = data.picture; // Imagem de perfil do Google
+            userEmail.textContent = `Email: ${data.email}`;
+
+            userInfoDiv.style.display = "block"; // Torna o bloco visível
+        }
+    </script>
 </body>
 </html>
