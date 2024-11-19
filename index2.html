@@ -4,47 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login com Google</title>
+    <!-- SDK do Google -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Biblioteca para decodificar JWT -->
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
 </head>
 <body>
     <h2>Login com Google</h2>
 
-    <!-- Botão simples de login -->
+    <!-- Botão simples para login -->
     <button id="google-login-button">Login com Google</button>
 
-    <!-- Exibir imagem e email do usuário -->
-    <div id="user-info" style="display: none;">
-        <img id="user-image" alt="Imagem do usuário" style="width: 100px; border-radius: 50%;" />
+    <!-- Exibir imagem e e-mail do usuário -->
+    <div id="user-info" style="display: none; margin-top: 20px;">
+        <img id="user-image" alt="Imagem do usuário" style="width: 100px; border-radius: 50%; margin-bottom: 10px;" />
         <p id="user-email"></p>
     </div>
 
     <script>
-        // Inicializar o cliente do Google
+        // Inicializa o SDK do Google
         google.accounts.id.initialize({
-            client_id: "290122559278-ivkm1aboq7bs2c2vkj0kosnu52p9o69r.apps.googleusercontent.com",
-            callback: handleCredentialResponse
+            client_id: "290122559278-ivkm1aboq7bs2c2vkj0kosnu52p9o69r.apps.googleusercontent.com", // Substitua pelo seu client_id
+            callback: handleCredentialResponse // Define o callback após login
         });
 
-        // Evento ao clicar no botão
+        // Adiciona evento ao botão
         document.getElementById("google-login-button").addEventListener("click", () => {
-            google.accounts.id.prompt(); // Exibe a tela de login do Google
+            google.accounts.id.prompt(); // Exibe o prompt de login do Google
         });
 
-        // Callback após o login
+        // Função para tratar a resposta do Google
         function handleCredentialResponse(response) {
+            if (!response.credential) {
+                alert("Falha no login. Por favor, tente novamente.");
+                return;
+            }
+
             // Decodifica o JWT para obter os dados do usuário
             const data = jwt_decode(response.credential);
 
-            // Exibe a imagem e o email do usuário
+            // Atualiza a interface com as informações do usuário
             const userInfoDiv = document.getElementById("user-info");
             const userImage = document.getElementById("user-image");
             const userEmail = document.getElementById("user-email");
 
-            userImage.src = data.picture; // Define a imagem de perfil do Google
-            userEmail.textContent = `Email: ${data.email}`; // Exibe o email
+            userImage.src = data.picture; // Adiciona a imagem do perfil
+            userEmail.textContent = `Email: ${data.email}`; // Mostra o e-mail
 
-            userInfoDiv.style.display = "block"; // Mostra a imagem e o email
+            userInfoDiv.style.display = "block"; // Torna visível a seção de informações
         }
     </script>
 </body>
