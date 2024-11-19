@@ -1,13 +1,72 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
-  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
-  <title>Hello, World!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login com Google</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+        function handleCredentialResponse(response) {
+            const data = jwt_decode(response.credential);
+            document.getElementById('user-email').innerHTML = 
+                `<p>Email logado: ${data.email}</p>`;
+        }
+
+        function toggleLoginButton() {
+            const checkbox = document.getElementById('terms-checkbox');
+            const loginButton = document.querySelector('.g_id_signin');
+            
+            if (checkbox.checked) {
+                loginButton.style.pointerEvents = "auto";
+                loginButton.style.opacity = "1"; // Habilita o botão de login visualmente
+            } else {
+                loginButton.style.pointerEvents = "none";
+                loginButton.style.opacity = "0.5"; // Desabilita o botão de login visualmente
+            }
+        }
+    </script>
+    <style>
+        #terms {
+            margin-top: 10px;
+        }
+        #terms a {
+            color: blue; /* Apenas os links ficam azuis */
+            text-decoration: none;
+        }
+        #terms a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-  <h1>
-    Hello, World!
-  </h1>
+    <h2>Login com Google</h2>
+
+    <!-- Caixa de login do Google -->
+    <div id="g_id_onload"
+        data-client_id="290122559278-ivkm1aboq7bs2c2vkj0kosnu52p9o69r.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse">
+    </div>
+    <div class="g_id_signin"
+        data-type="standard"
+        data-size="large"
+        data-theme="outline"
+        data-text="sign_in_with"
+        data-shape="rectangular"
+        data-logo_alignment="left"
+        style="pointer-events: none; opacity: 0.5;"> <!-- Desabilitado por padrão -->
+    </div>
+
+    <!-- Checkbox para aceitar os termos -->
+    <div id="terms">
+        <input type="checkbox" id="terms-checkbox" onchange="toggleLoginButton()">
+        <label for="terms-checkbox">
+            Eu aceito a <a href="https://sites.google.com/view/politicadeprivacidade-id00001/in%C3%ADcio" target="_blank">Política de Privacidade</a> e os <a href="https://sites.google.com/view/termosdeuso-id00001/in%C3%ADcio" target="_blank">Termos de Uso</a>.
+        </label>
+    </div>
+
+    <!-- Exibir email do usuário após login -->
+    <div id="user-email"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
 </body>
 </html>
